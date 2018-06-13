@@ -8,6 +8,7 @@
 \usepackage{soul} % highlight texts
 \usepackage{natbib}
 \usepackage{graphicx}
+\usepackage{hyperref}
 
 % Header
 \usepackage{fancyhdr}
@@ -27,9 +28,9 @@
 \label{emu:ok}
     \hat{z_0}=\sum_{i=0}^{n}\lambda_iz_i
 \end{equation}
-where $\hat{z_0}$ is the estimation of $z$ in $(x_0, y_0)$. $\lambda_i$ is the weight. It should be noted that this equation is established in the estimation of each unknown point, that is, $\lambda_i$ are different for each unknown point.
+where $\hat{z_0}$ is the estimation of $z$ in $(x_0, y_0)$. $\lambda_i$ is the weight. It should be noted that this equation is established in each unknown point, that is, $\lambda_i$ are different for each unknown point.
 
-The weights can be solved by considering two restrictions:
+The weights can be solved by considering two constraints:
 \begin{equation}
 \label{emu:res2}
     \min\limits_{\lambda_i}Var(\hat{z_0}-z_0)
@@ -40,14 +41,14 @@ and
     E(\hat{z_0}-z_0)=0
 \end{equation}
 
-\subsection{Hypotheses and Restrictions}
+\subsection{Hypotheses and Constraints}
 The hypotheses for the Ordinary Kriging include the equal expectation and variance in any point $(x,y)$, \textit{i.e.,}
 \begin{align}
     E[z(x,y)]=E[z]=c\\
     Var[z(x,y)]=\sigma^2
 \end{align}
 
-So, the restriction (\ref{emu:equalexp}) becomes
+So, the constraint (\ref{emu:equalexp}) becomes
 \begin{equation}
 \label{emu:res1}
     \sum_{i=0}^n\lambda_i=1
@@ -69,7 +70,7 @@ The semivariance function is used to estimate the semivariance between a known p
 \begin{enumerate}[1)]
     \item Calculating the semivariances between all pairs of known points $z_i$ and $z_j$ ($r_{ij}$) and fitting the semivariance function (\ref{emu:semi}) ($r_{ij}=r(h_{ij})$)
     \item Calculating the semivariances between the unknown point $z_0$ and known points $z_i$ ($r_{0i}$) using the semivariance function (\ref{emu:semi})
-    \item Using the restrictions (\ref{emu:res1}), (\ref{emu:res2}) and estimated semivariances $r_{0i}$, calculating the weights $\lambda_i$ for this unknown point
+    \item Using the constraints (\ref{emu:res1}), (\ref{emu:res2}) and estimated semivariances $r_{0i}$, calculating the weights $\lambda_i$ for this unknown point
     \item Using Equation (\ref{emu:ok}) to estimate the value of the unknown point
 \end{enumerate}
 
@@ -87,10 +88,41 @@ In the case of KED, predictions at new locations are made by:
     \hat{z}_{KED}(0)=\sum_{i=0}^{n}\lambda_i(0)^{KED}z(i)
 \end{equation}
 
-\subsection{Hypotheses and Restrictions}
+\subsection{Hypotheses and Constraints}
 \begin{equation}
     \sum_{i=1}^n\lambda_i^{KED}(0)\cdot q(i)=q(0)
 \end{equation}
-where $q(i)$ is the value of the auxiliary variable (aka. predictor) (\textit{e.g.,} DEM) in the location $i$ and $p$ is the number.
+where $q(i)$ is the value of the auxiliary variable (aka. predictor) (\textit{e.g.,} DEM) in the location $i$.
+
+\section{Universal Kriging}
+\subsection{General Equation}
+New points are estimated by 
+\begin{equation}
+    \hat{Z}_0=\sum_{j=1}^n\lambda_jZ(\mathbf{x}_j)
+\end{equation}
+where $\mathbf{x}_j$ is the coordinate vector of the point $j$. For example, for two-dimensional coordinates, $\mathbf{x}=(x_1, x_2)$.
+
+The assumption of the mean is 
+\begin{equation}
+    \begin{split}
+        E[Z(\mathbf{x})]=m(\mathbf{x}) \\
+        m(\mathbf{x})=\sum_{l=0}^La_lf_l(\mathbf{x})
+    \end{split}
+\end{equation}
+with known functions $f_l(\mathbf{x})$ and unknwon $a_l$'s. $L$ is the number of the functions $f_l(\mathbf{x})$. For example, for a polynomial trend, $f_0(\mathbf{x})=1$, $f_1(\mathbf{x})=x_1$, $f_2(\mathbf{x})=x_2$, $f_3(\mathbf{x})=x_1x_2$, \textit{etc.}. 
+
+\subsection{Hypotheses and Constraints}
+For any combination of $a_l$'s,
+\begin{equation}
+    f_l(\mathbf{x}_0)=\sum_{j=1}^n\lambda_jf_l(\mathbf{x}_j)
+\end{equation}
+These are $L+1$ constraints, corresponding to $L+1$ $a_l$'s. 
+
+\section*{References}
+\begin{itemize}
+    \item Kriging Interpolation (Chinese): \url{https://xg1990.com/blog/archives/222}
+    \item Universal Kriging: \url{http://infohost.nmt.edu/~olegm/586/HYD11-16.pdf}
+    \item Hengl, T., Heuvelink, G. B. M., \& Stein, A. (2003). Comparison of kriging with external drift and regression-kriging. Technical note, ITC.
+\end{itemize}
 
 \end{document}
