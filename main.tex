@@ -9,12 +9,13 @@
 \usepackage{natbib}
 \usepackage{graphicx}
 \usepackage{hyperref}
+\usepackage{setspace} % Line spacing
 
 % Header
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhf{}%Clear all heads and foots
-\setlength{\headheight}{35pt} %Eliminate the warning of "headheight is too samll"
+\setlength{\headheight}{35pt} %Eliminate the warning of "headheight is too small"
 \rhead{Kriging Interpolation\\Jianzhao Bi\\\today}
 \cfoot{\thepage}
 
@@ -30,7 +31,7 @@
 \end{equation}
 where $\hat{z_0}$ is the estimation of $z$ in $(x_0, y_0)$. $\lambda_i$ is the weight. It should be noted that this equation is established in each unknown point, that is, $\lambda_i$ are different for each unknown point.
 
-The weights can be solved by considering two constraints:
+The weights can be solved by considering two constraints (minimum variance and unbiasedness):
 \begin{equation}
 \label{emu:res2}
     \min\limits_{\lambda_i}Var(\hat{z_0}-z_0)
